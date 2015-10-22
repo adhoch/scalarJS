@@ -118,8 +118,8 @@ $(document).ready(function () {
     function imgcheck(func) {
         // gets the body class
         var body = document.body.getAttribute('class');
-        // checks to see if it's on a text+media page
-        if (body.indexOf("primary_role_composite") != -1) {
+        // checks to see if it's on a text+media  or a path page
+        if (body.indexOf("primary_role_composite") != -1 || body.indexOf("primary_role_path") != -1) {
             // Checks if there's an image media element loaded
             if ($('.mediaelement').length > 0) {
                 // if there is runs check omeka
