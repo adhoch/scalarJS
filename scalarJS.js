@@ -2,6 +2,136 @@
 var omekaLoc = "http://www.iub.edu/~lodzdsc/omeka-2.3.1";
 i = 0;
 
+//*** inserts header image
+function insertheader(func) {
+    // checks if header image is present
+    if ($('#headerimg').length == 0) {
+        // inserts header image above scalar header
+        $('#ScalarHeaderMenu').prepend('<a href="' + omekaLoc + '"><img id="headerimg" src="http://iub.edu/~lodzdsc/omeka-2.1/themes/seasons/images/headersm.png"/></a>')
+        // needs a second run with a half second delay for some reason
+        var delay = 500;
+        // reruns again after delay
+        setTimeout(function () {
+            insertheader();
+        },
+        delay);
+    } else {        
+        // sets a delay to check again
+        //.5 seconds
+        var delay = 500;
+        // checks again after delay
+        setTimeout(function () {
+            insertheader();
+        },
+        delay);
+    }
+}
+
+
+// *******************************
+// forwards a click on an image in an article/exhibit/text page to the omeka installation
+
+function checkOmeka(func) {
+    var a = performance.now();
+    //gets the json of omeka files
+    $.getJSON("http://www.iub.edu/~lodzdsc/omeka-2.3.1/api/files", function (json) {
+        // goes through each media object on the page
+        $('div.mediaelement').each(function () {
+            
+            // ************* As archive gets larger might want to switch to searching on individual files
+            // ************* rather than the whole file JSON. Current limit 1000 files in JSON
+            $(this).find('div.media_metadata').each(function () {
+                
+                //  fileLoc = $(this).find('td:contains("dcterms:sourceLocation")').next().text();
+                // fileId = fileLoc.substring(fileLoc.lastIndexOf('/') + 1);
+                //console.log('inloopID'+fileId);
+                //console.log('inloopLOC'+fileLoc);
+                // ************
+                
+                // gets the url with the filename
+                fileName = $(this).find('td:contains("Source URL")').siblings().find('a').attr('href');
+            })
+            // checks to see if the file is an omeka item
+            if (fileName.indexOf(omekaLoc + '/files') != -1) {
+                
+                // strips the url before the filename
+                fileName = fileName.substring(fileName.lastIndexOf('/') + 1);
+                // checks for and strips any trailing question marks
+                
+                if (fileName.indexOf('?') != -1) {
+                    fileName = fileName.substring(0, fileName.indexOf('?'));
+                }
+                
+                // Goes through all the files in the omeka JSON
+                for (var x = 0; x < json.length; x++) {
+                    // finds the entry with a matching filename
+                    if (fileName == json[x].filename) {
+                        // sets a variable with the item url
+                        var omekalink = omekaLoc + '/items/show/' + json[x].item.id
+                        
+                        // opens the item page in a new url
+                        $(this).find('div[class="mediaContainer"]').click(function () {
+                            window.open(omekalink, 'popout');
+                            // console.log(omekalink);
+                        })
+                        // Runs whenever the media tabs are moused over. Below needs this to work
+                        // for some reason
+                        $(this).find('div[class="media_tabs"]').mouseover(function () {
+                            
+                            // opens the item page in a new url when source is clicked on.
+                            $(this).find('div[class="media_tab"]:eq(2)').click(function () {
+                                window.open(omekalink, 'popout');
+                            })
+                        })
+                    }
+                }
+            }
+        });
+    })
+    // checks script performance time
+    var b = performance.now();
+    console.log(b - a);
+    $('.mediaelement mediaObject img').css('display', 'initial');
+}
+
+// **** repeatedly checks for images in article/exhibit/text pages
+function imgcheck(func) {
+    // Helps run max # of times
+    i++
+    // gets the body class
+    var body = document.body.getAttribute('class');
+    // will run up to 20 times (10 secs)
+    if (i < 20) {
+        // checks to see if it's on a text+media  or a path page
+        if (body.indexOf("primary_role_composite") != -1 || body.indexOf("primary_role_path") != -1) {
+            // Checks if there's media tabs loaded
+            // Was mediaelement but sometimes that loaded before some of its children
+            if ($('.media_tabs').length > 0) {
+                // hides images until script runs and links are established
+                $('.mediaelement mediaObject img').css('display', 'none');
+                // if there is runs check omeka
+                checkOmeka();
+                var delay = 500;
+                // reruns again after delay
+                setTimeout(function () {
+                    checkOmeka();
+                },
+                delay);
+            } else {
+                // sets a delay to check again
+                //.5 seconds
+                var delay = 500;
+                // checks again after delay
+                setTimeout(function () {
+                    imgcheck();
+                },
+                delay);
+            }
+        }
+    }
+}
+
+
 
 $(document).ready(function () {
     
@@ -51,108 +181,10 @@ $(document).ready(function () {
         $(this).attr('href', curUrl + ref);
     })
     
-    // *******************************
-    // forwards a click on an image in an article/exhibit/text page to the omeka installation
     
-    function checkOmeka(func) {
-        var a = performance.now();
-        //gets the json of omeka files
-        $.getJSON("http://www.iub.edu/~lodzdsc/omeka-2.3.1/api/files", function (json) {
-            // goes through each media object on the page
-            $('div.mediaelement').each(function () {
-                
-                // ************* As archive gets larger might want to switch to searching on individual files
-                // ************* rather than the whole file JSON. Current limit 1000 files in JSON
-                $(this).find('div.media_metadata').each(function () {
-                    
-                    //  fileLoc = $(this).find('td:contains("dcterms:sourceLocation")').next().text();
-                    // fileId = fileLoc.substring(fileLoc.lastIndexOf('/') + 1);
-                    //console.log('inloopID'+fileId);
-                    //console.log('inloopLOC'+fileLoc);
-                    // ************
-                    
-                    // gets the url with the filename
-                    fileName = $(this).find('td:contains("Source URL")').siblings().find('a').attr('href');
-                })
-                // checks to see if the file is an omeka item
-                if (fileName.indexOf(omekaLoc + '/files') != -1) {
-                    
-                    // strips the url before the filename
-                    fileName = fileName.substring(fileName.lastIndexOf('/') + 1);
-                    // checks for and strips any trailing question marks
-                    
-                    if (fileName.indexOf('?') != -1) {
-                        fileName = fileName.substring(0, fileName.indexOf('?'));
-                    }
-                    
-                    // Goes through all the files in the omeka JSON
-                    for (var x = 0; x < json.length; x++) {
-                        // finds the entry with a matching filename
-                        if (fileName == json[x].filename) {
-                            // sets a variable with the item url
-                            var omekalink = omekaLoc + '/items/show/' + json[x].item.id
-                            
-                            // opens the item page in a new url
-                            $(this).find('div[class="mediaContainer"]').click(function () {
-                                window.open(omekalink, 'popout');
-                                // console.log(omekalink);
-                            })
-                            // Runs whenever the media tabs are moused over. Below needs this to work
-                            // for some reason
-                            $(this).find('div[class="media_tabs"]').mouseover(function () {
-                                
-                                // opens the item page in a new url when source is clicked on.
-                                $(this).find('div[class="media_tab"]:eq(2)').click(function () {
-                                    window.open(omekalink, 'popout');
-                                })
-                            })
-                        }
-                    }
-                }
-            });
-        })
-        // checks script performance time
-        var b = performance.now();
-        console.log(b - a);
-        $('.mediaelement mediaObject img').css('display', 'initial');
-    }
-    
-    // **** repeatedly checks for images in article/exhibit/text pages
-    function imgcheck(func) {
-        // Helps run max # of times
-        i++        
-        // gets the body class
-        var body = document.body.getAttribute('class');        
-        // will run up to 20 times (10 secs)
-        if (i < 20) {        
-        // checks to see if it's on a text+media  or a path page
-            if (body.indexOf("primary_role_composite") != -1 || body.indexOf("primary_role_path") != -1) {
-                // Checks if there's media tabs loaded
-                // Was mediaelement but sometimes that loaded before some of its children
-                if ($('.media_tabs').length > 0) {
-                    // hides images until script runs and links are established
-                    $('.mediaelement mediaObject img').css('display', 'none');
-                    // if there is runs check omeka
-                    checkOmeka();
-                    var delay = 500;
-                    // reruns again after delay
-                    setTimeout(function () {
-                        checkOmeka();                 
-                    },
-                    delay);
-                } else {
-                    // sets a delay to check again
-                    //.5 seconds
-                    var delay = 500;
-                    // checks again after delay
-                    setTimeout(function () {                        
-                        imgcheck();
-                    },
-                    delay);
-                }
-            }
-        }
-    }
     // checks and reroutes images
     imgcheck();
+    //function to insert the Jewish Life in Interwar Lodz header
+    // **** disabled for now
+    //insertheader();
 });

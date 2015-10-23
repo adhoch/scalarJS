@@ -1,2 +1,9 @@
 .texteo_icon {
 display:none;}
+
+#headerimg {
+    position:absolute;
+    top:50px;
+    left:calc(-50vw + 50%);
+    width:100vw;
+}
