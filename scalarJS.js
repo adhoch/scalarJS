@@ -1,4 +1,4 @@
-var fileName=""
+// sets the omeka location -- this could be changed to a test in functions
 var omekaLoc = "http://www.iub.edu/~lodzdsc/omeka-2.3.1"
 
 $(document).ready(function () {
@@ -23,8 +23,7 @@ $(document).ready(function () {
             $.getJSON(omekaApi, function (json) {
                 
                 // find the item id associated with the file
-                var itemId = json.item.id;
-                console.log(itemId);                
+                var itemId = json.item.id;                
                 // create the item url
                 var omekaItemLoc = omekaLoc + "/items/show/" + itemId
                 // redirect to item page
@@ -51,14 +50,13 @@ $(document).ready(function () {
     // *******************************
     // forwards a click on an image in an article/exhibit/text page to the omeka installation
     
-    function checkOmeka(func) {
-        // sets the omeka location -- this could be changed to a test        
+    function checkOmeka(func) {        
         var a = performance.now();
         //gets the json of omeka files
         $.getJSON("http://www.iub.edu/~lodzdsc/omeka-2.3.1/api/files", function (json) {
             // goes through each media object on the page
             $('div.mediaelement').each(function () {
-            
+                
                 // ************* As archive gets larger might want to switch to searching on individual files
                 // ************* rather than the whole file JSON. Current limit 1000 files in JSON
                 $(this).find('div.media_metadata').each(function () {
@@ -71,7 +69,6 @@ $(document).ready(function () {
                     
                     // gets the url with the filename
                     fileName = $(this).find('td:contains("Source URL")').siblings().find('a').attr('href');
-                    
                 })
                 // checks to see if the file is an omeka item
                 if (fileName.indexOf(omekaLoc + '/files') != -1) {
@@ -99,7 +96,7 @@ $(document).ready(function () {
                             // Runs whenever the media tabs are moused over. Below needs this to work
                             // for some reason
                             $(this).find('div[class="media_tabs"]').mouseover(function () {
-                            
+                                
                                 // opens the item page in a new url when source is clicked on.
                                 $(this).find('div[class="media_tab"]:eq(2)').click(function () {
                                     window.open(omekalink, 'popout');
@@ -110,6 +107,7 @@ $(document).ready(function () {
                 }
             });
         })
+        // checks script performance time
         var b = performance.now();
         console.log(b - a);
     }
@@ -120,26 +118,33 @@ $(document).ready(function () {
         var body = document.body.getAttribute('class');
         // checks to see if it's on a text+media  or a path page
         if (body.indexOf("primary_role_composite") != -1 || body.indexOf("primary_role_path") != -1) {
-            // Checks if there's an image media element loaded
-            if ($('.mediaelement').length > 0) {
+            // Checks if there's media tabs loaded
+            // Was mediaelement but sometimes that loaded before some of its children
+            if ($('.media_tabs').length > 0) {
+                // hides images until script runs and links are established
+                $('.mediaelement mediaObject img').css('display', 'none');
                 // if there is runs check omeka
-                checkOmeka();
-                console.log('success');
-                var delay = 1000;
+                checkOmeka();                
+                var delay = 500;
                 // reruns again after delay
                 setTimeout(function () {
                     checkOmeka();
+                    // unhides images from earlier
+                    $('.mediaelement mediaObject img').css('display', 'initial');
                 },
                 delay);
             } else {
-                // sets a delay to check again
-                //3 seconds
-                var delay = 3000;
-                // checks again after delay
-                setTimeout(function () {
-                    imgcheck();
-                },
-                delay);
+                // will run for 5 seconds
+                for (i = 0; i < 11; i++) {
+                    // sets a delay to check again
+                    //.5 seconds
+                    var delay = 500;
+                    // checks again after delay
+                    setTimeout(function () {
+                        imgcheck();
+                    },
+                    delay);
+                }
             }
         }
     }
