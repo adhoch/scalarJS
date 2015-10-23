@@ -1,7 +1,11 @@
 // sets the omeka location -- this could be changed to a test in functions
-var omekaLoc = "http://www.iub.edu/~lodzdsc/omeka-2.3.1"
+var omekaLoc = "http://www.iub.edu/~lodzdsc/omeka-2.3.1";
+i = 0;
+
 
 $(document).ready(function () {
+    
+    
     var body = document.body.getAttribute('class');
     // *******************************
     // To forward item pages to Omeka installation
@@ -23,7 +27,7 @@ $(document).ready(function () {
             $.getJSON(omekaApi, function (json) {
                 
                 // find the item id associated with the file
-                var itemId = json.item.id;                
+                var itemId = json.item.id;
                 // create the item url
                 var omekaItemLoc = omekaLoc + "/items/show/" + itemId
                 // redirect to item page
@@ -50,7 +54,7 @@ $(document).ready(function () {
     // *******************************
     // forwards a click on an image in an article/exhibit/text page to the omeka installation
     
-    function checkOmeka(func) {        
+    function checkOmeka(func) {
         var a = performance.now();
         //gets the json of omeka files
         $.getJSON("http://www.iub.edu/~lodzdsc/omeka-2.3.1/api/files", function (json) {
@@ -110,37 +114,38 @@ $(document).ready(function () {
         // checks script performance time
         var b = performance.now();
         console.log(b - a);
+        $('.mediaelement mediaObject img').css('display', 'initial');
     }
     
     // **** repeatedly checks for images in article/exhibit/text pages
     function imgcheck(func) {
+        // Helps run max # of times
+        i++        
         // gets the body class
-        var body = document.body.getAttribute('class');
+        var body = document.body.getAttribute('class');        
+        // will run up to 20 times (10 secs)
+        if (i < 20) {        
         // checks to see if it's on a text+media  or a path page
-        if (body.indexOf("primary_role_composite") != -1 || body.indexOf("primary_role_path") != -1) {
-            // Checks if there's media tabs loaded
-            // Was mediaelement but sometimes that loaded before some of its children
-            if ($('.media_tabs').length > 0) {
-                // hides images until script runs and links are established
-                $('.mediaelement mediaObject img').css('display', 'none');
-                // if there is runs check omeka
-                checkOmeka();                
-                var delay = 500;
-                // reruns again after delay
-                setTimeout(function () {
+            if (body.indexOf("primary_role_composite") != -1 || body.indexOf("primary_role_path") != -1) {
+                // Checks if there's media tabs loaded
+                // Was mediaelement but sometimes that loaded before some of its children
+                if ($('.media_tabs').length > 0) {
+                    // hides images until script runs and links are established
+                    $('.mediaelement mediaObject img').css('display', 'none');
+                    // if there is runs check omeka
                     checkOmeka();
-                    // unhides images from earlier
-                    $('.mediaelement mediaObject img').css('display', 'initial');
-                },
-                delay);
-            } else {
-                // will run for 5 seconds
-                for (i = 0; i < 11; i++) {
+                    var delay = 500;
+                    // reruns again after delay
+                    setTimeout(function () {
+                        checkOmeka();                 
+                    },
+                    delay);
+                } else {
                     // sets a delay to check again
                     //.5 seconds
                     var delay = 500;
                     // checks again after delay
-                    setTimeout(function () {
+                    setTimeout(function () {                        
                         imgcheck();
                     },
                     delay);
