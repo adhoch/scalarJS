@@ -2,6 +2,48 @@
 var omekaLoc = "http://www.iub.edu/~lodzdsc/omeka-2.3.1";
 i = 0;
 
+
+
+//************************
+//Function rewriting the text of 'this page is tagged with' and deleting 'This page is a tag of'
+//as well the path
+
+/*Takes as arguments text to replace "this page is tagged with", the element to surround it with
+and an integer below 10 that controls how many times the script is run*/
+function replaceTags(text, elem,t) {
+// increments t and test # of times script has run
+t++;
+if(t<10){
+$('has_paths').remove();
+if ($('h1').filter(':contains("This page is a tag of:")'))
+{$('h1').filter(':contains("This page is a tag of:")').parent().css('display','none');}
+// checks to see if the .has_tags class is present
+    if ($('.has_tags').length != 0) {
+    // replaces the header of the has tags list with desired element and text
+        $('.has_tags').prev().replaceWith('<'+elem+'>'+text+'</elem>');
+        var delay = 500;
+        // reruns again after delay
+        setTimeout(function () {
+            replaceTags(text,elem,t);
+        },
+        delay);
+    } else {
+        var delay = 500;
+        // reruns again after delay
+        setTimeout(function () {
+            replaceTags(text,elem,t);
+        },
+        delay);
+    }
+}
+}
+//*** Adds classes to tags/tagged by
+function insertTagClass(func) {
+    if ($('.has_tags').length != 0) {
+    }
+}
+
+
 //*** inserts header image
 function insertheader(func) {
     // checks if header image is present
@@ -15,7 +57,7 @@ function insertheader(func) {
             insertheader();
         },
         delay);
-    } else {        
+    } else {
         // sets a delay to check again
         //.5 seconds
         var delay = 500;
@@ -187,4 +229,5 @@ $(document).ready(function () {
     //function to insert the Jewish Life in Interwar Lodz header
     // **** disabled for now
     //insertheader();
+    
 });
