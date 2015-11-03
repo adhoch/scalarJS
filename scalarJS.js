@@ -1,71 +1,151 @@
+/************** TOC
+ * 1. Global Variables
+ * 2. Functions available for individual pages but not run
+ *  a. replaceTags
+ *  b. replacetTagOf
+ *  c. replacePath
+ * 3. Globally Run Functions
+ *  a. insertHeader
+ *  b. checkOmeka
+ *  c. imgCheck
+ *  d. runDelay
+ *  e. itemPage
+ *  f. footnotes
+ */
+
+//*** 1. Global Variables
 // sets the omeka location -- this could be changed to a test in functions
 var omekaLoc = "http://www.iub.edu/~lodzdsc/omeka-2.3.1";
-i = 0;
 
 
+
+//* 2. Functions available for individual pages but not run
+
+
+
+//************************ replaceTags, replaceTagOf seem to break the tag visualization
+//Function rewriting the text of 'this page is tagged with'
+/*Takes as arguments text to replace "this page is tagged with", an option to hide the whole section and an integer below 10
+that controls how many times the script is run*/
+
+function replaceTags(tags, display, t) {
+    // increments t and test # of times script has run
+    t++;
+    if (t < 10) {
+        // checks to see if the .has_tags class is present
+        if ($('.has_tags').length != 0) {
+            
+            // checks to see if the display should be turned off
+            if (display == 'n') {
+                //turns the display off
+                $('.has_tags').parent().css('display', 'none')
+            }
+            
+            // replaces the header of the has tags list with desired element and text
+            $('.has_tags').prev().replaceWith('<h1>' + tags + '</h1>');
+            var delay = 500;
+            // reruns again after delay
+            setTimeout(function () {
+                replaceTags(tags, display, t);
+            },
+            delay);
+        } else {
+            var delay = 500;
+            // reruns again after delay
+            setTimeout(function () {
+                replaceTags(tags, display, t);
+            },
+            delay);
+        }
+    }
+}
 
 //************************
-//Function rewriting the text of 'this page is tagged with' and deleting 'This page is a tag of'
-//as well the path
-
-/*Takes as arguments text to replace "this page is tagged with", the element to surround it with
-and an integer below 10 that controls how many times the script is run*/
-function replaceTags(text, elem,t) {
-// increments t and test # of times script has run
-t++;
-if(t<10){
-$('has_paths').remove();
-if ($('h1').filter(':contains("This page is a tag of:")'))
-{$('h1').filter(':contains("This page is a tag of:")').parent().css('display','none');}
-// checks to see if the .has_tags class is present
-    if ($('.has_tags').length != 0) {
-    // replaces the header of the has tags list with desired element and text
-        $('.has_tags').prev().replaceWith('<'+elem+'>'+text+'</elem>');
-        var delay = 500;
-        // reruns again after delay
-        setTimeout(function () {
-            replaceTags(text,elem,t);
-        },
-        delay);
-    } else {
-        var delay = 500;
-        // reruns again after delay
-        setTimeout(function () {
-            replaceTags(text,elem,t);
-        },
-        delay);
-    }
-}
-}
-//*** Adds classes to tags/tagged by
-function insertTagClass(func) {
-    if ($('.has_tags').length != 0) {
+//Function rewriting the text of 'this page is a tag of'
+/*Takes as arguments text to replace "this page is a tag of", an option to hide the whole section and an integer below 10
+that controls how many times the script is run*/
+function replaceTagOf(tagof, display, t) {
+    t++;
+    if (t < 10) {
+        // checks if this page is a tag of something
+        if ($('h1').filter(':contains("This page is a tag of:")')) {
+            // checks to see if the display should be turned off
+            if (display == 'n') {
+                //turns the display off
+                $('h1').filter(':contains("This page is a tag of:")').parent().css('display', 'none');
+            }
+            // replaces the header of the 'this page is a tag of' list with desired element and text
+            $('h1').filter(':contains("This page is a tag of:")').replaceWith('<h1>' + tagof + '</h1>');
+            var delay = 500;
+            // reruns again after delay
+            setTimeout(function () {
+                replaceTagOf(tagof, display, t);
+            },
+            delay);
+        } else {
+            var delay = 500;
+            // reruns again after delay
+            setTimeout(function () {
+                replaceTagOf(tagof, display, t);
+            },
+            delay);
+        }
     }
 }
 
 
-//*** inserts header image
+//***********************(
+//Function rewriting the title text of the path: 'contents'
+/*Takes as arguments text to replace "contents", an option to hide the whole section and an integer below 10
+that controls how many times the script is run*/
+function replacePath(path, display, t) {
+    t++;
+    if (t < 10) {
+        
+        // checks if this page is has a path
+        if ($('ol[class="path_of"')) {
+            // checks to see if the display should be turned off
+            if (display == 'n') {
+                //turns the display off
+                $('ol[class="path_of"').parent().css('display', 'none');
+            }
+            // replaces 'contents' with the users choice of text
+            $('ol[class="path_of"').prev().replaceWith('<h1>' + path + '</h1>');
+            // checks to see if the back button has a following nav button and if so makes it the primary nav
+            if ($('#back-btn').next().hasClass('nav_btn')) {
+                $('#back-btn').next().addClass('primary');
+                $('#back-btn').next().css('display', 'inline-block');
+            }
+            // reruns again after delay
+            var delay = 500;
+            setTimeout(function () {
+                replacePath(path, display, t);
+            },
+            delay);
+        } else {
+            var delay = 500;
+            // reruns again after delay
+            setTimeout(function () {
+                replacePath(path, display, t);
+            },
+            delay);
+        }
+    }
+}
+
+
+//* 3. Globally Run Functions
+
+
+//*** inserts header image and makes sure page titles are below it
 function insertheader(func) {
+    height = $('#ScalarHeaderMenu').height()
+    $('article[class="page"]').css('padding-top', height + height * .1);
     // checks if header image is present
     if ($('#headerimg').length == 0) {
         // inserts header image above scalar header
         $('#ScalarHeaderMenu').prepend('<a href="' + omekaLoc + '"><img id="headerimg" src="http://iub.edu/~lodzdsc/omeka-2.1/themes/seasons/images/headersm.png"/></a>')
-        // needs a second run with a half second delay for some reason
-        var delay = 500;
-        // reruns again after delay
-        setTimeout(function () {
-            insertheader();
-        },
-        delay);
-    } else {
-        // sets a delay to check again
-        //.5 seconds
-        var delay = 500;
-        // checks again after delay
-        setTimeout(function () {
-            insertheader();
-        },
-        delay);
+        $('article[class="page"]').css('padding-top', height + height * .1);
     }
 }
 
@@ -137,52 +217,52 @@ function checkOmeka(func) {
 }
 
 // **** repeatedly checks for images in article/exhibit/text pages
-function imgcheck(func) {
+function imgCheck(func) {
     // Helps run max # of times
-    i++
+    
     // gets the body class
     var body = document.body.getAttribute('class');
     // will run up to 20 times (10 secs)
-    if (i < 20) {
-        // checks to see if it's on a text+media  or a path page
-        if (body.indexOf("primary_role_composite") != -1 || body.indexOf("primary_role_path") != -1) {
-            // Checks if there's media tabs loaded
-            // Was mediaelement but sometimes that loaded before some of its children
-            if ($('.media_tabs').length > 0) {
-                // hides images until script runs and links are established
-                $('.mediaelement mediaObject img').css('display', 'none');
-                // if there is runs check omeka
-                checkOmeka();
-                var delay = 500;
-                // reruns again after delay
-                setTimeout(function () {
-                    checkOmeka();
-                },
-                delay);
-            } else {
-                // sets a delay to check again
-                //.5 seconds
-                var delay = 500;
-                // checks again after delay
-                setTimeout(function () {
-                    imgcheck();
-                },
-                delay);
-            }
+    
+    // checks to see if it's on a text+media  or a path page
+    if (body.indexOf("primary_role_composite") != -1 || body.indexOf("primary_role_path") != -1) {
+        // Checks if there's media tabs loaded
+        // Was mediaelement but sometimes that loaded before some of its children
+        if ($('.media_tabs').length > 0) {
+            // hides images until script runs and links are established
+            $('.mediaelement mediaObject img').css('display', 'none');
+            // if there is runs check omeka
+            checkOmeka();
         }
     }
 }
 
 
+// ******** This function runs and reruns neccesary functions 10 times. This should be long enough
+// for scalar to load everything needed for the functions to be effective
+function runDelay(func) {
+    
+    // checks and reroutes images
+    console.log(x);
+    var delay = 500;
+    // reruns again after delay
+    setTimeout(function () {
+        x++;
+        if (x < 10) {
+            checkOmeka();
+            imgCheck();
+            insertheader();
+            runDelay();
+        }
+    },
+    delay);
+}
 
-$(document).ready(function () {
-    
-    
+// *******************************
+// To forward item pages to Omeka installation
+function itemPage() {
     var body = document.body.getAttribute('class');
-    // *******************************
-    // To forward item pages to Omeka installation
     // check if it's an item page
-    
     if (body == "primary_role_media") {
         // find the omeka file page
         var omekaFile = $('a[rel="art:sourceLocation"]').attr('href');
@@ -207,10 +287,11 @@ $(document).ready(function () {
             });
         }
     }
-    
-    // ***********************************
-    
-    // Make footnotes functional
+}
+
+// ***********************************
+// Make same page links (footnotes) functional
+function footnotes() {
     // gets the current url, strips it of any existing hashtags
     var curUrl = $(location).attr('href').substr(0, $(location).attr('href').indexOf('#'));
     // if there were not hashtags gets current url
@@ -222,12 +303,13 @@ $(document).ready(function () {
         var ref = $(this).attr('href');
         $(this).attr('href', curUrl + ref);
     })
-    
-    
-    // checks and reroutes images
-    imgcheck();
-    //function to insert the Jewish Life in Interwar Lodz header
-    // **** disabled for now
-    //insertheader();
-    
+}
+
+$(document).ready(function () {
+    x = 0;
+    runDelay();
 });
+
+$(window).on('resize', function () {
+    insertheader();
+})
