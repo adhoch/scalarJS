@@ -139,7 +139,13 @@ function replacePath(path, display, t) {
 
 //*** inserts header image and makes sure page titles are below it
 function insertheader(func) {
-    height = $('#ScalarHeaderMenu').height()
+// checks window height to decide about displaying the header image
+    if ($(window).width() > 767) {
+        height = $('#ScalarHeaderMenu').height();
+    } else {
+        height = $('div[class="navbar-header"]').height();
+    }
+    // adds the height of the nav + 10% to the padding-top
     $('article[class="page"]').css('padding-top', height + height * .1);
     // checks if header image is present
     if ($('#headerimg').length == 0) {
