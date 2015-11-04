@@ -16,7 +16,7 @@
 //*** 1. Global Variables
 // sets the omeka location -- this could be changed to a test in functions
 var omekaLoc = "http://www.iub.edu/~lodzdsc/omeka-2.3.1";
-
+var scalarLoc = "http://scalar.usc.edu/works/scalar-test-1-1"
 
 
 //* 2. Functions available for individual pages but not run
@@ -142,16 +142,16 @@ function insertheader(func) {
     // checks if header image is present
     if ($('#headerimg').length == 0) {
         // inserts header image above scalar header
-        $('#scalarheader').prepend('<a id="omekaheaderlink" href="' + omekaLoc + '"><img id="headerimg" src="http://iub.edu/~lodzdsc/omeka-2.1/themes/seasons/images/headersm.png"/></a>')    
+        $('#scalarheader').prepend('<a id="omekaheaderlink" href="' + omekaLoc + '"><img id="headerimg" src="http://iub.edu/~lodzdsc/omeka-2.1/themes/seasons/images/headersm.png"/></a>')
     }
     // checks to see if scalar text has been hidden
     var scalpres = $('span.navbar-text').children('.book-title').css('display');
-if (scalpres!="none"){
-// hides scalar nav text
-    $('span.navbar-text').children('.book-title').css('display', 'none');
-    // inserts omeka navbar
-    var omekanav = "<a class='omekanavitem' href='"+omekaLoc+"'>Home</a><a class='omekanavitem' href='"+omekaLoc+"'>Archive</a'><a class='omekanavitem' href='"+omekaLoc+"'>Encyclopedia</a><a class='omekanavitem' href='"+omekaLoc+"'>Scholarship</a><a class='omekanavitem' href='"+omekaLoc+"'>About</a>"
-    $('span.navbar-text').append(omekanav);
+    if (scalpres != "none") {
+        // hides scalar nav text
+        $('span.navbar-text').children('.book-title').css('display', 'none');
+        // inserts omeka navbar
+        var omekanav = "<a class='omekanavitem' href='" + omekaLoc + "'>Home</a><a class='omekanavitem' href='" + scalarLoc + "/primer'>Primer</a><a class='omekanavitem' href='" + omekaLoc + "/items/browse'>Archive</a'><a class='omekanavitem' href='" + scalarLoc + "/encyclopedia'>Encyclopedia</a><a class='omekanavitem' href='" + scalarLoc + "/scholarship'>Scholarship</a><a class='omekanavitem' href='" + omekaLoc + "/about'>About</a>"
+        $('span.navbar-text').append(omekanav);
     }
     // checks window height to decide about displaying the header image
     if ($(window).width() > 767) {
@@ -161,7 +161,6 @@ if (scalpres!="none"){
     }
     // adds the height of the nav + 10% to the padding-top
     $('article[class="page"]').css('padding-top', height + height * .1);
-    
 }
 
 
@@ -323,6 +322,7 @@ function footnotes() {
 $(document).ready(function () {
     x = 0;
     runDelay();
+    footnotes();
 });
 
 $(window).on('resize', function () {
