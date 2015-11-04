@@ -8,9 +8,10 @@
  *  a. insertHeader
  *  b. checkOmeka
  *  c. imgCheck
- *  d. runDelay
- *  e. itemPage
+ *  d. itemPage
+ *  e. tagPag
  *  f. footnotes
+ *  g. runDelay
  */
 
 //*** 1. Global Variables
@@ -251,27 +252,6 @@ function imgCheck(func) {
     }
 }
 
-
-// ******** This function runs and reruns neccesary functions 10 times. This should be long enough
-// for scalar to load everything needed for the functions to be effective
-function runDelay(func) {
-    
-    // checks and reroutes images
-    console.log(x);
-    var delay = 500;
-    // reruns again after delay
-    setTimeout(function () {
-        x++;
-        if (x < 10) {
-            checkOmeka();
-            imgCheck();
-            insertheader();
-            runDelay();
-        }
-    },
-    delay);
-}
-
 // *******************************
 // To forward item pages to Omeka installation
 function itemPage() {
@@ -304,6 +284,42 @@ function itemPage() {
 }
 
 // ***********************************
+// Displays omeka items with same tag on tag page
+function tagPage(){
+//Makes sure Omeka items are shown
+$('.omekaItems').css('display','block');
+//Makes sure Scalar items are hidden
+$('[typeof="scalar:Media"]').parent().css('display','block');
+// Checks to see if items have already been inserted
+if ($('.omekaItems').length == 0) {
+listItem='';
+var body = $('body').attr('class');
+// Checks if it's a tag page
+if (body.indexOf("primary_role_tag")!=-1) {
+// Gets the tag name and puts the api url in front of it
+tag="http://www.iub.edu/~lodzdsc/omeka-2.3.1/api/items?tags="+$('title').first().text();
+// gets all the items with the tag
+$.getJSON(tag, function (item) {
+for (var x=0; x< item.length;x++){
+  // Gets the item id and inserts the appropriate url
+  itemUrl=omekaLoc+'/items/show/'+item[x].id;
+  // Gets the item title. Might make a little more robust by testing to see if the element is title
+  // but this should always come first
+  itemTitle=item[x].element_texts[0].text;
+  // Creates a variable filled with the list items of the tag
+  listItem=listItem+"<li><a href='"+itemUrl+"'>"+itemTitle+"</a></li>" 
+}
+// Double hecks to see if items have already been inserted NEEDED
+if ($('.omekaItems').length == 0) {
+// inserts an unordered list below the first relationship section. This should be "This page is tagged by"
+$('section[class="relationships"]').first().after('<section class="omekaItems relationships" style="display: block;"><h1>Items on this Topic</h1><ul>'+listItem+'</ul></section>');
+}
+
+})
+}
+}
+}
+// ***********************************
 // Make same page links (footnotes) functional
 function footnotes() {
     // gets the current url, strips it of any existing hashtags
@@ -319,10 +335,35 @@ function footnotes() {
     })
 }
 
+// ******** This function runs and reruns neccesary functions 10 times. This should be long enough
+// for scalar to load everything needed for the functions to be effective
+function runDelay(func) {
+    
+    // checks and reroutes images
+    console.log(x);
+    var delay = 500;
+    // reruns again after delay
+    setTimeout(function () {
+        x++;
+        if (x < 10) {
+            checkOmeka();
+            imgCheck();
+            insertheader();
+            tagPage();
+            runDelay();            
+        }
+    },
+    delay);
+}
+
+
+
 $(document).ready(function () {
     x = 0;
     runDelay();
     footnotes();
+    itemPage();
+    
 });
 
 $(window).on('resize', function () {
