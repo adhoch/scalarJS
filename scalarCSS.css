@@ -2,8 +2,20 @@
 display:none;}
 
 #headerimg {
-    position:absolute;
     top:50px;
     left:calc(-50vw + 50%);
     width:100vw;
+}
+
+.navbar-text.title_wrapper {
+width:100%;}
+
+.omekanavitem {margin-left:2%;}
+
+nav.mobile_view .omekanavitem {display:none;}
+
+#scalarheader.short {
+    transform: translatey(-8rem);
+    -webkit-transform: translatey(-8rem);
+    -moz-transform: translatey(-8rem);
 }

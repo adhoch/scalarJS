@@ -137,22 +137,31 @@ function replacePath(path, display, t) {
 //* 3. Globally Run Functions
 
 
-//*** inserts header image and makes sure page titles are below it
+//*** inserts header image and navbar and makes sure page titles are below it
 function insertheader(func) {
-// checks window height to decide about displaying the header image
+    // checks if header image is present
+    if ($('#headerimg').length == 0) {
+        // inserts header image above scalar header
+        $('#scalarheader').prepend('<a id="omekaheaderlink" href="' + omekaLoc + '"><img id="headerimg" src="http://iub.edu/~lodzdsc/omeka-2.1/themes/seasons/images/headersm.png"/></a>')    
+    }
+    // checks to see if scalar text has been hidden
+    var scalpres = $('span.navbar-text').children('.book-title').css('display');
+if (scalpres!="none"){
+// hides scalar nav text
+    $('span.navbar-text').children('.book-title').css('display', 'none');
+    // inserts omeka navbar
+    var omekanav = "<a class='omekanavitem' href='"+omekaLoc+"'>Home</a><a class='omekanavitem' href='"+omekaLoc+"'>Archive</a'><a class='omekanavitem' href='"+omekaLoc+"'>Encyclopedia</a><a class='omekanavitem' href='"+omekaLoc+"'>Scholarship</a><a class='omekanavitem' href='"+omekaLoc+"'>About</a>"
+    $('span.navbar-text').append(omekanav);
+    }
+    // checks window height to decide about displaying the header image
     if ($(window).width() > 767) {
-        height = $('#ScalarHeaderMenu').height();
+        height = $('#scalarheader').height();
     } else {
         height = $('div[class="navbar-header"]').height();
     }
     // adds the height of the nav + 10% to the padding-top
     $('article[class="page"]').css('padding-top', height + height * .1);
-    // checks if header image is present
-    if ($('#headerimg').length == 0) {
-        // inserts header image above scalar header
-        $('#ScalarHeaderMenu').prepend('<a href="' + omekaLoc + '"><img id="headerimg" src="http://iub.edu/~lodzdsc/omeka-2.1/themes/seasons/images/headersm.png"/></a>')
-        $('article[class="page"]').css('padding-top', height + height * .1);
-    }
+    
 }
 
 
