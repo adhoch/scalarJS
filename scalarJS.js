@@ -151,7 +151,7 @@ function insertheader(func) {
         // hides scalar nav text
         $('span.navbar-text').children('.book-title').css('display', 'none');
         // inserts omeka navbar
-        var omekanav = "<a class='omekanavitem' href='" + omekaLoc + "'>Home</a><a class='omekanavitem' href='" + scalarLoc + "/primer'>Primer</a><a class='omekanavitem' href='" + omekaLoc + "/items/browse'>Archive</a'><a class='omekanavitem' href='" + scalarLoc + "/encyclopedia'>Encyclopedia</a><a class='omekanavitem' href='" + scalarLoc + "/scholarship'>Scholarship</a><a class='omekanavitem' href='" + omekaLoc + "/about'>About</a>"
+        var omekanav = "<a class='omekanavitem' href='" + omekaLoc + "'>Home</a><a class='omekanavitem' href='" + scalarLoc + "/primer'>Primer</a><a class='omekanavitem' href='" + omekaLoc + "/items/browse'>Archive</a'><a class='omekanavitem' href='" + scalarLoc + "/exhibits'>Exhibits</a><a class='omekanavitem' href='" + scalarLoc + "/scholarship'>Scholarship</a><a class='omekanavitem' href='" + omekaLoc + "/about'>About</a>"
         $('span.navbar-text').append(omekanav);
     }
     // checks window height to decide about displaying the header image
