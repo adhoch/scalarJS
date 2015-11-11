@@ -9,7 +9,7 @@
  *  b. checkOmeka
  *  c. imgCheck
  *  d. itemPage
- *  e. tagPag
+ *  e. tagPage
  *  f. footnotes
  *  g. runDelay
  */
@@ -24,7 +24,8 @@ var scalarLoc = "http://scalar.usc.edu/works/scalar-test-1-1"
 
 
 
-//************************ replaceTags, replaceTagOf seem to break the tag visualization
+//************************ replaceTags, replaceTagOf seem to break scalars tag visualization
+// 2.a. replaceTags
 //Function rewriting the text of 'this page is tagged with'
 /*Takes as arguments text to replace "this page is tagged with", an option to hide the whole section and an integer below 10
 that controls how many times the script is run*/
@@ -62,6 +63,7 @@ function replaceTags(tags, display, t) {
 }
 
 //************************
+//2.b. replaceTagOf
 //Function rewriting the text of 'this page is a tag of'
 /*Takes as arguments text to replace "this page is a tag of", an option to hide the whole section and an integer below 10
 that controls how many times the script is run*/
@@ -95,7 +97,8 @@ function replaceTagOf(tagof, display, t) {
 }
 
 
-//***********************(
+//***********************
+//2.c. replacePath
 //Function rewriting the title text of the path: 'contents'
 /*Takes as arguments text to replace "contents", an option to hide the whole section and an integer below 10
 that controls how many times the script is run*/
@@ -135,11 +138,10 @@ function replacePath(path, display, t) {
 }
 
 
-//* 3. Globally Run Functions
-
-
+//************ 3. Globally Run Functions
+//3.a. insertHeader
 //*** inserts header image and navbar and makes sure page titles are below it
-function insertheader(func) {
+function insertHeader(func) {
     // checks if header image is present
     if ($('#headerimg').length == 0) {
         // inserts header image above scalar header
@@ -166,6 +168,7 @@ function insertheader(func) {
 
 
 // *******************************
+//3.b. checkOmeka
 // forwards a click on an image in an article/exhibit/text page to the omeka installation
 
 function checkOmeka(func) {
@@ -230,7 +233,8 @@ function checkOmeka(func) {
     console.log(b - a);
     $('.mediaelement mediaObject img').css('display', 'initial');
 }
-
+//***************
+//3.c. imgCheck
 // **** repeatedly checks for images in article/exhibit/text pages
 function imgCheck(func) {
     // Helps run max # of times
@@ -253,6 +257,7 @@ function imgCheck(func) {
 }
 
 // *******************************
+//3.d. itemPage
 // To forward item pages to Omeka installation
 function itemPage() {
     var body = document.body.getAttribute('class');
@@ -284,12 +289,13 @@ function itemPage() {
 }
 
 // ***********************************
+//3.e. tagPge
 // Displays omeka items with same tag on tag page
 function tagPage(){
 //Makes sure Omeka items are shown
 $('.omekaItems').css('display','block');
 //Makes sure Scalar items are hidden
-$('[typeof="scalar:Media"]').parent().css('display','block');
+$('[typeof="scalar:Media"]').parent().css('display','none');
 // Checks to see if items have already been inserted
 if ($('.omekaItems').length == 0) {
 listItem='';
@@ -320,6 +326,7 @@ $('section[class="relationships"]').first().after('<section class="omekaItems re
 }
 }
 // ***********************************
+//3.f. footnotes
 // Make same page links (footnotes) functional
 function footnotes() {
     // gets the current url, strips it of any existing hashtags
@@ -336,6 +343,7 @@ function footnotes() {
 }
 
 // ******** This function runs and reruns neccesary functions 10 times. This should be long enough
+//3.g. runDelay
 // for scalar to load everything needed for the functions to be effective
 function runDelay(func) {
     
@@ -348,7 +356,7 @@ function runDelay(func) {
         if (x < 10) {
             checkOmeka();
             imgCheck();
-            insertheader();
+            insertHeader();
             tagPage();
             runDelay();            
         }
@@ -367,5 +375,5 @@ $(document).ready(function () {
 });
 
 $(window).on('resize', function () {
-    insertheader();
+    insertHeader();
 })
