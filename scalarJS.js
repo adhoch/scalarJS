@@ -316,7 +316,7 @@ for (var x=0; x< item.length;x++){
   listItem=listItem+"<li><a href='"+itemUrl+"'>"+itemTitle+"</a></li>" 
 }
 // Double hecks to see if items have already been inserted NEEDED
-if ($('.omekaItems').length == 0) {
+if ($('.omekaItems').length == 0 && listItem) {
 // inserts an unordered list below the first relationship section. This should be "This page is tagged by"
 $('section[class="relationships"]').first().after('<section class="omekaItems relationships" style="display: block;"><h1>Items on this Topic</h1><ul>'+listItem+'</ul></section>');
 }
