@@ -173,6 +173,7 @@ function insertHeader(func) {
 
 function checkOmeka(func) {
     var a = performance.now();
+    fileName="";
     //gets the json of omeka files
     $.getJSON("http://www.iub.edu/~lodzdsc/omeka-2.3.1/api/files", function (json) {
         // goes through each media object on the page
@@ -181,15 +182,16 @@ function checkOmeka(func) {
             // ************* As archive gets larger might want to switch to searching on individual files
             // ************* rather than the whole file JSON. Current limit 1000 files in JSON
             $(this).find('div.media_metadata').each(function () {
-                
-                //  fileLoc = $(this).find('td:contains("dcterms:sourceLocation")').next().text();
+                console.log($(this));
+                // fileLoc = $(this).find('td:contains("dcterms:sourceLocation")').next().text();
                 // fileId = fileLoc.substring(fileLoc.lastIndexOf('/') + 1);
-                //console.log('inloopID'+fileId);
-                //console.log('inloopLOC'+fileLoc);
+                // console.log('inloopID'+fileId);
+                // console.log('inloopLOC'+fileLoc);
                 // ************
                 
                 // gets the url with the filename
                 fileName = $(this).find('td:contains("Source URL")').siblings().find('a').attr('href');
+                console.log(fileName);
             })
             // checks to see if the file is an omeka item
             if (fileName.indexOf(omekaLoc + '/files') != -1) {
@@ -315,7 +317,7 @@ for (var x=0; x< item.length;x++){
   // Creates a variable filled with the list items of the tag
   listItem=listItem+"<li><a href='"+itemUrl+"'>"+itemTitle+"</a></li>" 
 }
-// Double hecks to see if items have already been inserted NEEDED
+// Double checks to see if items have already been inserted NEEDED
 if ($('.omekaItems').length == 0 && listItem) {
 // inserts an unordered list below the first relationship section. This should be "This page is tagged by"
 $('section[class="relationships"]').first().after('<section class="omekaItems relationships" style="display: block;"><h1>Items on this Topic</h1><ul>'+listItem+'</ul></section>');
@@ -342,7 +344,7 @@ function footnotes() {
     })
 }
 
-// ******** This function runs and reruns neccesary functions 10 times. This should be long enough
+// ******** This function runs and reruns neccesary functions 30 times. This should be long enough, 10 times wasn't
 //3.g. runDelay
 // for scalar to load everything needed for the functions to be effective
 function runDelay(func) {
@@ -353,7 +355,7 @@ function runDelay(func) {
     // reruns again after delay
     setTimeout(function () {
         x++;
-        if (x < 10) {
+        if (x < 30) {
             checkOmeka();
             imgCheck();
             insertHeader();
