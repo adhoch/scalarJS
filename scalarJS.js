@@ -1,3 +1,64 @@
+window.addEventListener("load", function() {
+var t=0;
+var run=0;
+navCss=$('style').append('.navbar li.mainMenu>.mainMenuDropdown>#mainMenuInside>li>ol>li>a:first-child:before{content:"";}.navbar .dropdown-menu li:hover, .navbar .dropdown-menu li:active{background-color:#cccccc;}div#contentCont h2 {color:white;text-align:center;margin-top:0;}')
+var menuImg=0;
+var medNum=$('a[resource]').length;
+$('span[property="sioc:content"]').on("DOMNodeInserted.menu",function(e)
+{ 
+t++;
+if ($('#omekaheaderlink').length==0){ insertHeader();
+;}
+menuImg=$('#wolfImage').length;
+if (menuImg==0){
+    $('#mainMenuInside').append($('<img style="width:100%;" id="wolfImage" src="http://www.iub.edu/~lodzdsc/omeka-2.3.1/themes/seasons/images/wolf.png"></img>'));
+    }
+
+
+    
+    $('.navbar ul.dropdown-menu, .navbar-nav .open .dropdown-menu, .navbar ul.dropdown-menu ul.dropdown-menu, .navbar ul.dropdown-menu ul.dropdown-menu ul.dropdown-menu, .navbar .dropdown-menu li:hover, .navbar .dropdown-menu li:active').css('background-color','#cccccc');
+    $('.navbar .mainMenuDropdown>#mainMenuInside').css({'width':'14rem', 'padding-bottom':'0'});
+    $('.navbar li.mainMenu>.mainMenuDropdown>#mainMenuInside>li.header h2, .tocMenu .expandedPage h2.title').css({'padding':'0', 'text-align':'center'});
+    $('.navbar li.mainMenu>.mainMenuDropdown>#mainMenuInside>li>ol>li>a, .tocMenu .expandedPage .relationships ol>li>a').css({'padding-left':'1.5rem', 'margin-left':'0'});
+    $('#mainMenuSubmenus.tocMenu').css({'left':'14rem','margin-left':'0'})
+
+    $('head').append(navCss)
+    if(menuImg>0){$('span[property="sioc:content"]').off("DOMNodeInserted.menu")
+    }
+   })
+$('span[property="sioc:content"]').on("DOMNodeInserted.header",function(e){
+    
+if (run==0 && $('.bg_screen').length>0)
+{$('.bg_screen').after($('#omekaheaderlink'));
+
+if($('#mt').length==0){
+run++;
+$('article').prepend($('<div style="position:absolute;margin-left:-15%;" id="mt"></div>'));
+
+$('#mt').append($('#scalarheader'));
+$('#ScalarHeaderMenuRight').css('display','none');
+$('navMenu').css('display','none')
+$('span[property="sioc:content"]').off("DOMNodeInserted.header")
+}}})
+
+$('span[property="sioc:content"]').on("DOMNodeInserted.media",function(e){
+if(medNum*4 == $('.media_tab').length){
+$('span[property="sioc:content"]').off("DOMNodeInserted.media")    
+    console.log('done');
+
+  checkOmeka();
+            imgCheck();
+insertFooter();
+            tagPage();
+                if($('#mt').length==0){$('article').prepend($('<div style="position:absolute;margin-left:-15%;" class="blah" id="mt"></div>'));
+
+$('#mt').append($('#scalarheader'));
+$('#ScalarHeaderMenuRight').css('display','none');
+$('navMenu').css('display','none')
+}
+
+    }})
+})
 /************** TOC
  * 1. Global Variables
  * 2. Functions available for individual pages but not run
@@ -143,10 +204,10 @@ function replacePath(path, display, t) {
 //*** inserts header image and navbar and makes sure page titles are below it
 function insertHeader(func) {
     // checks if header image is present
-    if ($('#headerimg').length == 0) {
+console.log('heaer');
         // inserts header image above scalar header
-        $('#scalarheader').prepend('<a id="omekaheaderlink" href="' + omekaLoc + '"><img id="headerimg" src="http://iub.edu/~lodzdsc/omeka-2.1/themes/seasons/images/headersm.png"/></a>')
-    }
+        $('#scalarheader').prepend('<a id="omekaheaderlink" href="' + omekaLoc + '"><img id="headerimg" src="http://www.iub.edu/~lodzdsc/omeka-2.3.1/files/theme_uploads/53233c3ff1774bbb40c52b5202034c3d.png"/></a>')
+    
     // checks to see if scalar text has been hidden
     var scalpres = $('span.navbar-text').children('.book-title').css('display');
     if (scalpres != "none") {
@@ -163,7 +224,8 @@ function insertHeader(func) {
         height = $('div[class="navbar-header"]').height();
     }
     // adds the height of the nav + 10% to the padding-top
-    $('article[class="page"]').css('padding-top', height + height * .1);
+    //$('article[class="page"]').css('padding-top', height + height * .1);
+ 
 }
 
 
@@ -182,7 +244,7 @@ function checkOmeka(func) {
             // ************* As archive gets larger might want to switch to searching on individual files
             // ************* rather than the whole file JSON. Current limit 1000 files in JSON
             $(this).find('div.media_metadata').each(function () {
-                console.log($(this));
+
                 // fileLoc = $(this).find('td:contains("dcterms:sourceLocation")').next().text();
                 // fileId = fileLoc.substring(fileLoc.lastIndexOf('/') + 1);
                 // console.log('inloopID'+fileId);
@@ -191,7 +253,7 @@ function checkOmeka(func) {
                 
                 // gets the url with the filename
                 fileName = $(this).find('td:contains("Source URL")').siblings().find('a').attr('href');
-                console.log(fileName);
+              
             })
             // checks to see if the file is an omeka item
             if (fileName.indexOf(omekaLoc + '/files') != -1) {
@@ -224,6 +286,9 @@ function checkOmeka(func) {
                             $(this).find('div[class="media_tab"]:eq(2)').click(function () {
                                 window.open(omekalink, 'popout');
                             })
+                            $(this).children().first().click(function () {
+                                window.open(omekalink, 'popout');
+                            })
                         })
                     }
                 }
@@ -232,7 +297,7 @@ function checkOmeka(func) {
     })
     // checks script performance time
     var b = performance.now();
-    console.log(b - a);
+    console.log('check');
     $('.mediaelement mediaObject img').css('display', 'initial');
 }
 //***************
@@ -355,10 +420,11 @@ function runDelay(func) {
     // reruns again after delay
     setTimeout(function () {
         x++;
-        if (x < 30) {
+        if (x < 5) {
             checkOmeka();
             imgCheck();
             insertHeader();
+           cinTest();
             tagPage();
             runDelay();            
         }
@@ -370,12 +436,65 @@ function runDelay(func) {
 
 $(document).ready(function () {
     x = 0;
-    runDelay();
+
     footnotes();
     itemPage();
     
 });
 
 $(window).on('resize', function () {
-    insertHeader();
+
+cinTest();
 })
+
+
+
+
+
+
+
+
+
+function insertFooter() {
+    if ($('footer[role]').length<1){
+        
+        $('article').append($('<div id="emptySpace"></div>'));
+        $('html').append($('<footer id="omekaFooter" role="contentinfo"> <div id="custom-footer-text">\
+                        <table id="footerTable">\
+<tbody>\
+<tr>\
+<td><a style="text-decoration: none; font-variant: small-caps; color: #4a3c31;" href="http://www.iu.edu/copyright/index.shtml">Copyright</a></td>\
+<td><a href="http://www.iub.edu"><img src="http://www.iub.edu/~lodzdsc/omeka-2.3.1/themes/seasons/images/iulogo.png" alt=""></a></td>\
+<td><a href="http://www.lodz.ap.gov.pl/index.php"> <img src="http://www.iub.edu/~lodzdsc/omeka-2.3.1/themes/seasons/images/aplLogo.png" alt=""></a></td>\
+<td><a href="http://www.muzeumwlokiennictwa.pl/?lang=en"><img src="http://www.iub.edu/~lodzdsc/omeka-2.3.1/themes/seasons/images/cmwLogo.png" alt=""></a></td>\
+<td><img src="http://www.iub.edu/~lodzdsc/omeka-2.3.1/themes/seasons/images/patronatLogo.png" alt=""></td>\
+</tr>\
+</tbody>\
+</table>                                </div>\
+</footer>'));
+$('#omekaFooter').append($('div#footer')[0]);
+    }
+    
+}
+
+function cinTest(){
+var contentCont=$('<div id="contentCont"></div>');
+var contentSpan =$('span[property="sioc:content"]');
+if($('#contentCont').length==0){contentCont.append(contentSpan.children())
+contentSpan.append(contentCont);
+}
+var chalkHeight= $(window).height()-contentSpan.offset().top;
+var chalkWidth=contentSpan.width();
+
+console.log(chalkHeight);
+contentSpan.css({
+    'height':chalkHeight
+})
+
+$('body').append('style')
+var contentContWidth=(($('article').width()-chalkWidth)/2)+chalkWidth;
+$('#contentCont').css('width', contentContWidth+'px');
+$('#contentCont').css('padding-right', contentContWidth*.1+'px');
+$('.navbar li.mainMenu>.mainMenuDropdown>#mainMenuInside>li.static').css('padding','0');
+$('.body_copy').css({'max-width': '100%', 'padding': '0'});
+}

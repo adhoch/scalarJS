@@ -1,11 +1,70 @@
+#omekaheaderlink {position:relative;}
+
+.body_copy {    font-family: 'Open Sans Light',Calibri, sans-serif!important;}
+
+
+.navbar .mainMenuDropdown #mainMenuInside {
+overflow-x:hidden;
+}
+
+a:hover {
+    color:#7D110C!important;
+}
+
+.tocMenu .expandedPage {
+    border-color: white;
+    border-width: 3px;}
+    
+    h1[property] {
+    color: #9a8a6e;
+    text-align: center;
+    font-family: 'Open Sans Light',Calibri, sans-serif!important;
+}
+a.nav_btn:hover, a.nav_btn.primary,.navbar-inverse .navbar-nav .open .dropdown-menu li.dropdown.open>a, li.dropdown.open>a, #mobileMainMenuSubmenus footer button,.navbar ul.dropdown-menu li a:hover,.navbar ul.dropdown-menu li.active a,.navbar li.mainMenu>.mainMenuDropdown>#mainMenuInside>li>ol>li.is_parent.active>a.expand,
+.tocMenu .expandedPage .relationships ol>li.is_parent.active>a.expand,
+.navbar li.mainMenu>.mainMenuDropdown>#mainMenuInside>li>ol>li.active>a.expand,
+.tocMenu .expandedPage .relationships ol>li.active>a.expand,
+#mobileMainMenuSubmenus li a:hover,
+#mobileMainMenuSubmenus li.active a,
+.navbar li.mainMenu>.mainMenuDropdown>#mainMenuInside>li>ol>li>a.expand:hover, .tocMenu .expandedPage .relationships ol>li>a.expand:hover,
+.tocMenu .expandedPage .relationships ol>li>a.expand:focus, .navbar .close:hover, #mobileMainMenuSubmenus .close:hover, .navbar .close:focus, #mobileMainMenuSubmenus .close:focus{
+
+
+}
+
+a.nav_btn:hover, a.nav_btn.primary{
+    
+    color:white;
+	background-color: #9a8a6e;
+}
+
+a  {
+    color:#9a8a6e;
+}
+
 .texteo_icon {
 display:none;}
 
 #headerimg {
-    top:50px;
-    left:calc(-50vw + 50%);
-    width:100vw;
+    top:50px;    
+width:69.4%;
+margin-left:15.3%;
 }
+
+.tocMenu .expandedPage {
+border-left: 2px solid #070707;
+background-color:#cccccc;
+}
+
+#mainMenuInside * a.expand {
+    right: 0;
+    margin-right: 0!important;
+}
+
+#mainMenuInside li.header {display:none;}
+
+div#footer {
+display:none;}
 
 .navbar-text.title_wrapper {
 width:100%;}
@@ -18,4 +77,200 @@ nav.mobile_view .omekanavitem {display:none;}
     transform: translatey(-8rem);
     -webkit-transform: translatey(-8rem);
     -moz-transform: translatey(-8rem);
+}
+
+#scalarheader.navbar {
+    margin-left:15.3%;
+    margin-right:15.3%;
+    background:transparent;
+    position:relative;
+    
+}
+
+#navul{
+display:flex;
+list-style:none;
+margin-bottom:0;
+margin-top:0;
+float:left;
+}
+
+#navul li a {
+color:#fff;
+}
+
+span.navbar-text.title_wrapper {
+    display:none;
+}
+
+body article.page {
+    margin-left:15%;
+    margin-right:15%;
+    max-width:100%;
+    min-height:auto;
+    padding-bottom:100px;
+    background-color: rgba(255,255,255,.9);
+padding-top:0;
+}
+
+article.page.splash {
+width:100%;
+margin-left:0;
+margin-right:0;
+top:0;
+background-size:100% 100%}
+
+div.bg_screen {
+    background-size:cover;
+    background-repeat:no-repeat;
+}
+
+div.bg_screen img {
+    display:none;
+}
+
+#custom-footer-text {
+    position:absolute;
+    bottom:0;
+    width:100%;
+   
+}
+
+#omekaFooter {
+    position:relative;
+    margin-top:-100px;
+    height:100px;
+    clear:both;
+    background-color:white;
+    
+}
+
+#footerTable{
+    width:100%;
+    text-align:center;
+}
+
+#emptySpace {
+display: none;
+    position: fixed;
+    width: 69.4%;
+    height: 100%;
+    overflow: hidden;
+    left: 0;
+    margin-left: inherit;
+    padding: 0;
+    background-color: white;
+    /* opacity: .5; */
+    z-index: 0;
+}
+
+#emptySpace, #scalarheader.navbar, article.page, #omekaFooter {
+    border:none;
+    width:69.4%;
+    margin-left:15.3%;
+    margin-right:15.3%;
+
+}
+
+#headerimg {
+    width:69.4%;
+    margin-left:15.3%;
+    margin-right:15.3%;
+margin-bottom:1%;}
+body {
+    padding-bottom:100px;
+}
+
+
+
+.mainMenu a.headerIcon {
+    background-image:url(http://www.iub.edu/~lodzdsc/omeka-2.3.1/themes/seasons/images/menu_icon.png);}
+
+#navMenu {display:none;}
+
+#ScalarHeaderMenuRight {display:none;}
+
+.navbar ul.dropdown-menu, .navbar-nav .open .dropdown-menu, .navbar ul.dropdown-menu ul.dropdown-menu, .navbar ul.dropdown-menu ul.dropdown-menu ul.dropdown-menu {
+    background-color: #cccccc;
+}
+
+#scalarheader div.container-fluid {padding-left:0;}
+
+@media (min-width: 768px)
+.navbar .mainMenuDropdown>#mainMenuInside {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    background-color: inherit;
+    border-right: 2px solid #070707;
+    padding: 3rem 0;
+    width: 14rem;
+    overflow-y: auto;
+}
+
+.navbar li.mainMenu>.mainMenuDropdown>#mainMenuInside>li>ol>li>a:first-child:before, .tocMenu .expandedPage .relationships ol>li>a:first-child:before {
+max-height:0px;
+}
+
+#typePapercut{
+        background-image:url("http://www.iub.edu/~lodzdsc/omeka-2.3.1/themes/seasons/images/item_papercut.png"), url(http://www.iub.edu/~lodzdsc/omeka-2.3.1/themes/seasons/images/body_background.jpg);
+background-repeat:no-repeat;        
+    background-size: 100% 100%;
+    height: 30vw;
+ width: 70%;
+    margin-left: 15%;
+    margin-right: 15%;
+    line-height: 2.5vw;
+    padding-left:0;
+    padding-right:0;
+}
+
+
+@font-face {
+    font-family: herold cond;
+    src:url(http://www.iub.edu/~lodzdsc/omeka-2.3.1/themes/seasons/images/HeroldCond.otf);
+}
+
+#typePapercut p, #typePapercut ul {
+    padding: 15%;
+    position: relative;
+    width: 100%;
+    line-height: 1em;
+    
+    }
+    
+#typePapercut p, #typePapercut ul li {
+    margin-bottom:1em;
+    text-indent: -1em;
+    padding-left: 1em;
+    }
+#typePapercut * a:visited,#typePapercut * a:link, #typePapercut  p a:visited {
+    color: #9a8a6e;
+    font-family: 'Open Sans Light',Calibri, sans-serif;
+    font-size: 1.5vw;
+    text-decoration: none!important;
+    margin-left: .25em;
+}
+
+#typePapercut p a:hover {
+    color: #990000;
+    font-family: 'Open Sans Light',Calibri, sans-serif;
+    font-size: 1.5vw;
+    text-decoration: none!important;
+    margin-left: .25em;}
+
+.navbar li.mainMenu>.mainMenuDropdown>#mainMenuInside>li.static {
+font-family:'Open Sans Light', Calibri, sans-serif;
+padding:0;
+}
+
+h1.heading_font.heading_weight.clearboth {
+font-family:'Open Sans Light', Calibri, sans-serif!important;
+padding-top:1rem;
+}
+
+h1 {font-size:3.5rem;}
+.navbar ul.dropdown-menu li>a, .tocMenu li>a, .navbar li.mainMenu>.mainMenuDropdown>#mainMenuInside>li>ol>li>a, .tocMenu .expandedPage .relationships ol>li>a {
+    color:white;
 }
